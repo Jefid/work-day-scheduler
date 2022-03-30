@@ -1,3 +1,4 @@
+var userBlocks = [];
 var hourBlocks = [
   "09:00",
   "10:00",
@@ -21,7 +22,9 @@ window.setInterval(function () {
 
 //creates row to store time block
 
-var displayTimesBlocks = function () {
+var displayTimeBlocks = function () {
+    localTasks();
+
   //for loop runs for each time stored in hourBlocks
   for (i = 0; i < hourBlocks.length; i++) {
     //creates div to hold task
@@ -45,6 +48,10 @@ var displayTimesBlocks = function () {
     taskInput.id = "input" + hourBlocks.indexOf(hourBlocks[i]);
 
 //space for local storage if statement to fill out info with parsed local storage
+if (userBlocks[i]) {
+    taskInput.value = userBlocks[i];
+  }
+  taskRow.appendChild(taskInput);
 
 //adds task info to middle of taskrow
     taskRow.appendChild(taskInput);
@@ -76,12 +83,26 @@ var displayTimesBlocks = function () {
   }
 };
 
-//need to add code for save button
 
-//need to add function to grab local storage
+displayTimeBlocks();
+
+//code for save button
+$("button").on("click", function () {
+    var tempTask = [];
+    for (var i = 0; i < hourBlocks.length; i++){
+        tempTask.push(document.getElementsByTagName("input")[i].value);
+    }
+    userBlocks = tempTask;
+    localStorage.setItem("tasks", JSON.stringify(userBlocks));
+});
+
+//function to grab local storage
+function localTasks() {
+    if (JSON.parse(localStorage.getItem("tasks"))){
+        userBlocks = JSON.parse(localStorage.getItem("tasks"));
+    }
+}
 
 
 
 
-
-displayTimesBlocks();
